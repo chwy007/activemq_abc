@@ -34,13 +34,14 @@ public class Producer {
         try {
             connection=connectionFactory.createConnection();
             connection.start();
-            session=connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
-            destination=session.createQueue("短信发送");
+            session=connection.createSession(true,Session.AUTO_ACKNOWLEDGE);
+//            destination=session.createQueue("短信发送");
+            destination=session.createTopic("短信发送T");
             messageProducer=session.createProducer(destination);
 
 
             for(int i=0;i<10;i++){
-                String txt="166****000"+i+"：新的验证码";
+                String txt="166****000"+i+"：新新新的验证码";
                 Message message=session.createTextMessage(txt);
                 messageProducer.send(message);
 

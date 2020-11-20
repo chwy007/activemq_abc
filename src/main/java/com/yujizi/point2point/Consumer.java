@@ -34,7 +34,7 @@ public class Consumer {
             destination=session.createQueue("短信发送");
             messageConsumer=session.createConsumer(destination);
 
-            for (int i=0;i<2;i++){
+            for (int i=0;i<1;i++){
                 TextMessage textMessage= (TextMessage) messageConsumer.receive();
                 System.out.println(textMessage.getText());
             }

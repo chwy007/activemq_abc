@@ -16,30 +16,19 @@ import javax.jms.*;
  * @Version: 1.0
  */
 public class Consumer02 {
-    private static final String USERNAME= ActiveMQConnection.DEFAULT_USER;
-    private static final String PASSWORD= ActiveMQConnection.DEFAULT_PASSWORD;
-    private static final String BROKERURL= ActiveMQConnection.DEFAULT_BROKER_URL;
+    private static final String ACTIVEMQ_URL= "tcp://192.168.126.132:61616";
+    private static final String QUEUE_NAME= "短信发送T";
 
-    public static void main(String[] args) {
-        ConnectionFactory connectionFactory=null;
-        Connection connection=null;
-        Session session=null;
-        Destination destination;//消息队列
-        MessageConsumer messageConsumer=null;
+    public static void main(String[] args) throws JMSException {
+        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(ACTIVEMQ_URL);
+        Connection connection = activeMQConnectionFactory.createConnection();
+        connection.start();
 
-        connectionFactory=new ActiveMQConnectionFactory(USERNAME,PASSWORD,BROKERURL);
-        try {
-            connection=connectionFactory.createConnection();
-            connection.start();
-            session=connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
-            destination=session.createTopic("短信发送T");
-            messageConsumer=session.createConsumer(destination);
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Topic topic = session.createTopic(QUEUE_NAME);
+        MessageConsumer messageConsumer = session.createConsumer(topic);
+        messageConsumer.setMessageListener(new MyMessageListener());
 
-            messageConsumer.setMessageListener(new MyMessageListener());
-            session.commit();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
     }
 
 

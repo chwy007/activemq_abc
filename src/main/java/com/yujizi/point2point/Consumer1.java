@@ -30,7 +30,7 @@ public class Consumer1 {
         try {
             connection=connectionFactory.createConnection();
             connection.start();
-            session=connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
+            session=connection.createSession(true,Session.AUTO_ACKNOWLEDGE);
             destination=session.createQueue("短信发送");
             messageConsumer=session.createConsumer(destination);
 
